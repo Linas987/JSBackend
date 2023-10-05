@@ -11,7 +11,7 @@ const con = createConnection({
     port: 3306, // optional, defaults to 1433, better stored in an app setting such as process.env.DB_PORT
     database: 'database', // better stored in an app setting such as process.env.DB_NAME
     ssl: {ca: fs.readFileSync("./DigiCertGlobalRootCA.crt.pem")}
-});
+}); 
 
 con.connect(function(err) {
     if (err) throw err;
