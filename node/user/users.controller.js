@@ -1,8 +1,10 @@
-const User = require("./users.model");
-const func = require("../utils")
-const {next} = require("lodash");
+import {User} from "./users.model.js";
+import {hash as hashFunc,s as nowDate} from "../utils.js";
+import sql from "../db.js";
+//import {next} from "lodash";
+
 // Create and Save a new Customer
-exports.create = (req, res) => {
+export const create = (req, res) => {
 // Validate request
     if (!req.body) {
         res.status(400).send({
@@ -17,10 +19,10 @@ exports.create = (req, res) => {
         email: req.body.email,
         name: req.body.name,
         password: req.body.password,
-        date: func.s
+        date: nowDate
     });
     // hash the password
-    user.password=func.hash(user.date,user.password),
+    user.password=hashFunc(user.date,user.password),
     // Save Customer in the database
     User.create(user, (err, data) => {
         //console.log(data);
@@ -34,7 +36,7 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all Customers from the database.
-exports.findAll = (req, res) => {
+export const findAll = (req, res) => {
     User.getAll((err, data) => {
         if (err)
             res.status(500).send({
@@ -46,7 +48,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single Customer with a customerId
-exports.findOne = (req, res) => {
+export const findOne = (req, res) => {
     User.findById(req.params.userId, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
@@ -63,7 +65,7 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Customer identified by the customerId in the request
-exports.update = (req, res) => {
+export const update = (req, res) => {
 // Validate Request
     if (!req.body) {
         res.status(400).send({
@@ -91,7 +93,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a Customer with the specified customerId in the request
-exports.delete = (req, res) => {
+export const remove = (req, res) => {
     User.remove(req.params.userId, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
@@ -108,7 +110,7 @@ exports.delete = (req, res) => {
 };
 
 // Retrieve a hashed password.
-exports.hash = (req, res) => {
+export const hash = (req, res) => {
     if (!req.body) {
         res.status(400).send({
             message: "Content can not be empty!"
@@ -130,9 +132,8 @@ exports.hash = (req, res) => {
     });
 };
 
-exports.auth=(request, response)=>{
-    const sql = require("../db");
-    const func = require("../utils")
+export const auth=(request, response)=>{
+
     let username = request.body.username;
     let password = request.body.password;
 
@@ -145,7 +146,7 @@ exports.auth=(request, response)=>{
                 let offset = r[0].date.getTimezoneOffset() * 60 * 1000;
                 let mytime = r[0].date.getTime() - offset;
                 r[0].date = (new Date(mytime).toISOString().split('T')[0]);
-                password = (func.hash(r[0].date, password));
+                password = (hashFunc(r[0].date, password));
                 console.log(password);
 
                 sql.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], function (error, results, fields) {

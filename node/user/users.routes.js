@@ -1,26 +1,27 @@
-module.exports = app => {
-    const users = require("./users.controller.js");
-    const { forceSync } = require('node-force-sync');
+import {create,findAll,findOne,update,remove,hash,auth} from "./users.controller.js";
+export default app => {
+    
+    //const { forceSync } = require('node-force-sync');
 
     // Create a new Customer
-    app.post("/users", users.create);
+    app.post("/users", create);
 
     // Retrieve all Customers
-    app.get("/users", users.findAll);
+    app.get("/users", findAll);
 
     // Retrieve a single Customer with customerId
-    app.get("/users/:userId", users.findOne);
+    app.get("/users/:userId", findOne);
 
     // Update a Customer with customerId
-    app.put("/users/:userId", users.update);
+    app.put("/users/:userId", update);
 
     // Delete a Customer with customerId
-    app.delete("/users/:userId", users.delete);
+    app.delete("/users/:userId", remove);
 
     // return hashed password
-    app.get("/hash",users.hash);
+    app.get("/hash",hash);
 
     // authenticate
-    app.post('/auth', users.auth);
+    app.post('/auth', auth);
 
 };

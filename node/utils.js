@@ -19,13 +19,13 @@ console.log(items,newItems)
 
 let offset = new Date().getTimezoneOffset()*60*1000;
 let mytime = new Date().getTime()-offset;
-let s=(new Date(mytime).toISOString().split('T')[0]);
+export let s=(new Date(mytime).toISOString().split('T')[0]);
 
 //let a = [{year: 'numeric'}, {month: 'numeric'}, {day: 'numeric'}];
 //let s = join(new Date, a, '-');
 console.log(s);
 
-const hash = (date,password)=> {
+export function hash (date,password) {
     let time = new Date(date).getTime();
     let i=0;
     // let encoded = (password.charCodeAt(0)+password.charAt(0)+time);
@@ -38,4 +38,3 @@ const hash = (date,password)=> {
     let final=(password.charAt(0)+f_encript+password.charAt(password.length/2));
     return(final);
 }
-module.exports={hash,s}//s here is the current date(yyyy-mm-dd)

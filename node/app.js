@@ -11,16 +11,14 @@
 //const _=require('./events/event-emitter')
 
 //connect to db
-const mysql = require('mysql');
-const db=require('./db');
-const user=require('./user/users.model');
 //const mon=require('mongoose');
-const session=require('express-session');
-const path = require('path');
-const cors=require("cors");
+import session from 'express-session';
+import { join } from 'path';
+import cors from "cors";
 
-const express = require("express");
-const bodyParser = require("body-parser");
+import express from "express";
+import pkg from 'body-parser';
+const { json, urlencoded } = pkg;
 
 const app = express();
 app.use(express.static("public"));
@@ -37,22 +35,25 @@ app.use(session({
 }));
 
 // parse requests of content-type: application/json
-app.use(bodyParser.json());
+app.use(json());
 
 // parse requests of content-type: application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(urlencoded({ extended: true }));
 
 // login route
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname + '/login.html'));
+    res.sendFile(join(__dirname + '/login.html'));
 });
 
 // login route
 app.get("/register", (req, res) => {
-    res.sendFile(path.join(__dirname + '/register.html'));
+    res.sendFile(join(__dirname + '/register.html'));
 });
 
-require("./user/users.routes.js")(app);
+import usersRoutes from "./user/users.routes.js";
+
+// Use the imported routes in your Express app
+usersRoutes(app);
 
 // set port, listen for requests
 app.listen(5000, () => {
